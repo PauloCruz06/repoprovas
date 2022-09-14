@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "strict": true,
+      "module": "ES6",
+      "moduleResolution": "node",
+      "outDir": "dist",
+      "target": "ES2016"
+    },
+    "ts-node": {
+      "esm": true
+    }
+  }
