@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 import "express-async-errors";
 
-import router from "./routes/index.js";
-import { errorHandler } from "./middlewares/errorHandler.js";
+import router from "./routes/index";
+import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
 

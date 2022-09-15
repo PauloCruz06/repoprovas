@@ -1,5 +1,5 @@
-import { prisma } from "../config/database.js";
-import { userData } from "../types/userType.js";
+import { prisma } from "../config/database";
+import { userData } from "../types/userType";
 
 export async function createUser(user: userData) {
     await prisma.users.create({ data: user });

@@ -2,10 +2,11 @@
     "compilerOptions": {
       "esModuleInterop": true,
       "strict": true,
-      "module": "ES6",
+      //"module": "ES6",
       "moduleResolution": "node",
       "outDir": "dist",
-      "target": "ES2016"
+      //"target": "ES2016",
+      "skipLibCheck": true
     },
     "ts-node": {
       "esm": true

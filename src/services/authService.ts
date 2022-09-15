@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-import * as authRepository from "../repositories/authRepository.js";
+import * as authRepository from "../repositories/authRepository";
 
 dotenv.config();
 

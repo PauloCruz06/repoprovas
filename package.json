@@ -1,13 +1,12 @@
 {
   "name": "projeto20-repoprovas",
   "version": "1.0.0",
-  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "dotenv -e .env.test prisma migrate dev && dotenv -e .env.test prisma db seed && dotenv -e .env.test jest --no-cache",
     "build": "npx tsc && npx prisma migrate deploy",
-    "start": "node ./dist/server.js",
+    "start": "node ./dist/src/server.js",
     "dev": "nodemon src/server.ts"
   },
   "prisma": {
