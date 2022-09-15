@@ -2,3 +2,4 @@ node_modules
 dist
 .wakatime-project
 .env
+.env.test
