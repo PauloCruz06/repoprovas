@@ -24,7 +24,7 @@ export async function signUp(email: string, password: string, confirmPassword: s
 export async function signIn(email: string, password: string) {
     const user = await authRepository.findUserByEmail(email);
     if(!user)
-        throw { code: 'Unauthorized', message: 'Invalid password!' };
+        throw { code: 'NotFound', message: 'User not found' };
 
     const compareHash = bcrypt.compareSync(password, user.password);
     if(!compareHash)

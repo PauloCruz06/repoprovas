@@ -3,11 +3,11 @@ import app from "../src/app";
 import supertest from "supertest";
 import userFactory from "./factories/userFactory";
 
-beforeAll( async() => (
-    await prisma.$executeRaw`TRUNCATE TABLE users CASCADE;`
+beforeEach( async() => (
+    await prisma.$executeRaw`TRUNCATE TABLE users CASCADE;`   
 ));
 
-describe("Test route Post '/signup'", () =>{
+describe("Test route Post '/signup'", () => {
     it("must return a 201 status code", async() => {
         const user = userFactory();
         const userSignUp = {...user, confirmPassword: user.password};
@@ -31,19 +31,33 @@ describe("Test route Post '/signup'", () =>{
 
         expect(result.status).toBe(422);
     });
+});
 
-    it("must return a 422 status code when trying to register email/password/passwordConfirm invalid", async() => {
-        const emailInvalid = { ...userFactory(), email: "blablabla" };
-        const passwordInvalid = { ...userFactory(), password: "bla1" };
-        const passwordConfirmInvalid = { ...userFactory(), passwordConfirm: "bla1" };
+describe("Test route Post '/signin'", () => {
+    it("must return a 200 status code and an object", async() => {
+        const user =  userFactory();
+        const userSignUp = { ...user, confirmPassword: user.password };
+        await supertest(app).post('/signup').send(userSignUp);
+        const result = await supertest(app).post('/signin').send(user);
+  
+        expect(result.status).toBe(200);
+        expect(result.body).toBeInstanceOf(Object);
+    });
 
-        const resultEmail = await supertest(app).post('/signup').send(emailInvalid);
-        const resultPassword = await supertest(app).post('/signup').send(passwordInvalid);
-        const resultConfirm = await supertest(app).post('/signup').send(passwordConfirmInvalid);
+    it("must return a 404 status code when trying to login with an unregistered email", async() => {
+        const user = userFactory();
+        const result = await supertest(app).post('/signin').send(user);
 
-        expect(resultEmail.status).toBe(422);
-        expect(resultPassword.status).toBe(422);
-        expect(resultConfirm.status).toBe(422);
+        expect(result.status).toBe(404);
+    });
+
+    it("must return a 401 status code when trying to login with an invalid password", async() => {
+        const user =  userFactory();
+        const userSignUp = { ...user, confirmPassword: user.password };
+        await supertest(app).post('/signup').send(userSignUp);
+        const result = await supertest(app).post('/signin').send({...user, password: "_______"});
+
+        expect(result.status).toBe(401);
     });
 });
 
