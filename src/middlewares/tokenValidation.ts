@@ -10,14 +10,14 @@ export default function tokenValidation(
     next: NextFunction
 ) {
     const { authorization } = req.headers;
-        const token = authorization?.replace("Bearer ", "");
+    const token = authorization?.replace("Bearer ", "");
 
-        if(!token) return res.sendStatus(401);
+    if(!token) return res.sendStatus(401);
         
-        jwt.verify(token, process.env.SECRET || "secret", (e, decoded) => {
-            if(e) return res.status(401).send(e.message);
+    jwt.verify(token, process.env.SECRET || "secret", (e, decoded) => {
+        if(e) return res.status(401).send(e.message);
             
-            res.locals.user = decoded;
-            next()
-        });
+        res.locals.user = decoded;
+        next()
+    });
 }
