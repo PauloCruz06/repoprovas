@@ -22,6 +22,7 @@ O projeto RepoProvas simula um sistema de compartilhamento de provas entre os es
 - JWTs & refresh tokens
 - Node.js
 - TypeScript
+- PrismaORM
 - SQL with PostgreSQL
 - Jest & Supertest
 
