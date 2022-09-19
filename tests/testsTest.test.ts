@@ -4,7 +4,7 @@ import supertest from "supertest";
 import testsFactory from "./factories/testsFactory";
 import userFactory from "./factories/userFactory";
 
-beforeAll( async() => {
+beforeEach( async() => {
     await prisma.$executeRaw`TRUNCATE TABLE "teachersDisciplines" CASCADE;`;
     await prisma.$executeRaw`TRUNCATE TABLE tests CASCADE;`;
     await prisma.$executeRaw`TRUNCATE TABLE users CASCADE;`;
@@ -61,6 +61,43 @@ describe("Test route Post '/register/tests'", () => {
         const result = await supertest(app).post('/register/tests').send(test);
 
         expect(result.status).toBe(401);
+    });
+});
+
+describe ("Test route Get '/tests/disciplines'", () => {
+    it("must return a 404 status code if there are no tests registered", async() => {
+        const user =  userFactory();
+
+        const userSignUp = { ...user, confirmPassword: user.password };
+        await supertest(app).post('/signup').send(userSignUp);
+        const login = await supertest(app).post('/signin').send(user);
+        const result = await supertest(app)
+            .get('/tests/disciplines')
+            .set('Authorization', `Bearer ${login.body.token}`)
+            .send();
+
+        expect(result.status).toBe(404);
+    });
+    
+    it("must return an object and a 200 status code", async() => {
+        const test = testsFactory();
+        const user =  userFactory();
+
+        const userSignUp = { ...user, confirmPassword: user.password };
+        await supertest(app).post('/signup').send(userSignUp);
+        const login = await supertest(app).post('/signin').send(user);
+        
+        await supertest(app)
+            .post('/register/tests')
+            .set('Authorization', `Bearer ${login.body.token}`)
+            .send(test);
+        const result = await supertest(app)
+            .get('/tests/disciplines')
+            .set('Authorization', `Bearer ${login.body.token}`)
+            .send();
+        
+        expect(result.status).toBe(200);
+        expect(result.body).toBeInstanceOf(Object);
     });
 });
 
