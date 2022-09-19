@@ -98,6 +98,57 @@ describe ("Test route Get '/tests/disciplines'", () => {
         expect(result.status).toBe(200);
         expect(result.body).toBeInstanceOf(Object);
     });
+
+    it("must return a 401 status code when trying to register without a user token", async() => {
+        const test = testsFactory();
+        const result = await supertest(app).post('/register/tests').send(test);
+
+        expect(result.status).toBe(401);
+    });
+});
+
+describe ("Test route Get '/tests/teachers'", () => {
+    it("must return a 404 status code if there are no tests registered", async() => {
+        const user =  userFactory();
+
+        const userSignUp = { ...user, confirmPassword: user.password };
+        await supertest(app).post('/signup').send(userSignUp);
+        const login = await supertest(app).post('/signin').send(user);
+        const result = await supertest(app)
+            .get('/tests/teachers')
+            .set('Authorization', `Bearer ${login.body.token}`)
+            .send();
+
+        expect(result.status).toBe(404);
+    });
+    
+    it("must return an object and a 200 status code", async() => {
+        const test = testsFactory();
+        const user =  userFactory();
+
+        const userSignUp = { ...user, confirmPassword: user.password };
+        await supertest(app).post('/signup').send(userSignUp);
+        const login = await supertest(app).post('/signin').send(user);
+        
+        await supertest(app)
+            .post('/register/tests')
+            .set('Authorization', `Bearer ${login.body.token}`)
+            .send(test);
+        const result = await supertest(app)
+            .get('/tests/teachers')
+            .set('Authorization', `Bearer ${login.body.token}`)
+            .send();
+        
+        expect(result.status).toBe(200);
+        expect(result.body).toBeInstanceOf(Object);
+    });
+
+    it("must return a 401 status code when trying to register without a user token", async() => {
+        const test = testsFactory();
+        const result = await supertest(app).post('/register/tests').send(test);
+
+        expect(result.status).toBe(401);
+    });
 });
 
 afterAll( async() => {
