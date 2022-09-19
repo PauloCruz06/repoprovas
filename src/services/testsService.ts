@@ -31,3 +31,57 @@ export async function registerTest(
 
     return testId;
 }
+
+export async function showTestsbyDisciplines() {
+    const disciplinesList = await testsRepository.findAllDisciplines();
+    const teachersList = await testsRepository.findAllTeachers();
+    const teachersDisciplinesList = await testsRepository.findTeachersDisciplines();
+    const termsList = await testsRepository.findAllTerms();
+    const testsList = await testsRepository.findAllTests();
+    const categorieList = await testsRepository.findAllCategories();
+
+    if(!testsList.length)
+        throw { code: 'NotFound', message: 'there are no tests registered' }
+
+    const teachers = teachersDisciplinesList.map( td => ({
+        ...td,
+        teacherName: teachersList.find( teacher =>
+            teacher.id === td.teacherId
+        )?.name
+    }));
+    const tests = testsList.map( tes => ({
+        name: tes.name,
+        pdfUrl: tes.pdfUrl,
+        categoryId: tes.categoryId,
+        category: categorieList.find( category =>
+            category.id === tes.categoryId
+        )?.name,
+        teacherName: teachers.find( teacher =>
+            teacher.id === tes.teacherDisciplineId
+        )?.teacherName,
+        disciplineId: teachers.find( discipline =>
+            discipline.id === tes.teacherDisciplineId
+        )?.disciplineId
+    }));
+    const categoriesWithTests = categorieList.map( cat => ({
+        ...cat,
+        tests: tests.filter( tes => cat.id === tes.categoryId )
+    }));
+    const disciplinesByCategory = disciplinesList.map( dis => ({
+        ...dis,
+        categories: categoriesWithTests.map( category => ({
+            ...category,
+            tests: category.tests.filter( test =>
+                test.disciplineId === dis.id
+            )
+        }))
+    }));
+    const testsObj = termsList.map( term => ({
+        term: term.number,
+        disciplines: disciplinesByCategory.filter( dis => (
+            dis.termId === term.id
+        ))
+    }));
+
+    return testsObj;
+}

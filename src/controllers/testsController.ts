@@ -21,3 +21,9 @@ export async function registerTest(req: Request, res: Response) {
 
     res.status(201).send({ testId });
 }
+
+export async function showTestByDiscipline(req: Request, res: Response) {
+    const tests = await testsService.showTestsbyDisciplines();
+
+    res.status(200).send(tests);
+}
