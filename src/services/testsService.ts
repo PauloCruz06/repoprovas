@@ -41,7 +41,7 @@ export async function showTestsbyDisciplines() {
     const categorieList = await testsRepository.findAllCategories();
 
     if(!testsList.length)
-        throw { code: 'NotFound', message: 'there are no tests registered' }
+        throw { code: 'NotFound', message: 'there are no tests registered' };
 
     const teachers = teachersDisciplinesList.map( td => ({
         ...td,
@@ -81,6 +81,53 @@ export async function showTestsbyDisciplines() {
         disciplines: disciplinesByCategory.filter( dis => (
             dis.termId === term.id
         ))
+    }));
+
+    return testsObj;
+}
+
+export async function showTestsByTeacher() {
+    const disciplinesList = await testsRepository.findAllDisciplines();
+    const teachersList = await testsRepository.findAllTeachers();
+    const teachersDisciplinesList = await testsRepository.findTeachersDisciplines();
+    const testsList = await testsRepository.findAllTests();
+    const categorieList = await testsRepository.findAllCategories();
+
+    if(!testsList.length)
+        throw { code: 'NotFound', message: 'there are no tests registered' };
+
+    const disciplines = teachersDisciplinesList.map( td => ({
+        ...td,
+        disciplineName: disciplinesList.find(discipline =>
+            discipline.id === td.disciplineId
+        )?.name
+    }));
+    const tests = testsList.map( test => ({
+        name: test.name,
+        pdfUrl: test.pdfUrl,
+        categoryId: test.categoryId,
+        categoryName: categorieList.find( category =>
+            category.id === test.categoryId
+        )?.name,
+        disciplineName: disciplines.find( discipline =>
+            discipline.id === test.teacherDisciplineId
+        )?.disciplineName,
+        teacherId: disciplines.find( discipline =>
+            discipline.id === test.teacherDisciplineId
+        )?.teacherId
+    }));
+    const categoriesWithTests = categorieList.map( cat => ({
+        ...cat,
+        tests: tests.filter( tes => cat.id === tes.categoryId )
+    }));
+    const testsObj = teachersList.map( teacher => ({
+        ...teacher,
+        categories: categoriesWithTests.map( category => ({
+            ...category,
+            tests: category.tests.filter( test =>
+                test.teacherId === teacher.id
+            )
+        }))
     }));
 
     return testsObj;

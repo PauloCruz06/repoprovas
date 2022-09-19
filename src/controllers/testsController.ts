@@ -27,3 +27,9 @@ export async function showTestByDiscipline(req: Request, res: Response) {
 
     res.status(200).send(tests);
 }
+
+export async function showTestByTeacher(req: Request, res: Response ) {
+    const tests = await testsService.showTestsByTeacher();
+
+    res.status(200).send(tests);
+}

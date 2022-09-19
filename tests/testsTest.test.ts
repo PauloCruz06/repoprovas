@@ -7,7 +7,6 @@ import userFactory from "./factories/userFactory";
 beforeEach( async() => {
     await prisma.$executeRaw`TRUNCATE TABLE "teachersDisciplines" CASCADE;`;
     await prisma.$executeRaw`TRUNCATE TABLE tests CASCADE;`;
-    await prisma.$executeRaw`TRUNCATE TABLE users CASCADE;`;
 });
 
 describe("Test route Post '/register/tests'", () => {
