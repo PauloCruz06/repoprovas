@@ -1,4 +1,4 @@
-# <p align = "center"> Projeto #20 - RepoProvas </p>
+# <p align = "center"> RepoProvas </p>
 
 <p align="center">
    <img src="./images/Logo.png"/>
