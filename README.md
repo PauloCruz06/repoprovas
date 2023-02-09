@@ -6,7 +6,7 @@
 
 <p align = "center">
    <img src="https://img.shields.io/badge/author-PauloCruz06-4dae71?style=flat-square" />
-   <img src="https://img.shields.io/github/languages/count/PauloCruz06/projeto20-repoprovas?color=4dae71&style=flat-square" />
+   <img src="https://img.shields.io/github/languages/count/PauloCruz06/repoprovas?color=4dae71&style=flat-square" />
 </p>
 
 
