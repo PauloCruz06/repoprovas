@@ -113,5 +113,3 @@ Também é possível rodar testes automatizados para as endpoints com o comando:
 ```
 npm test
 ```
-
-:grey_exclamation:[template usado nesse readme](https://gist.github.com/luanalessa/7f98467a5ed62d00dcbde67d4556a1e4#file-readme-md) :)
