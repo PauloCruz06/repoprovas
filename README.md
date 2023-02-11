@@ -95,7 +95,7 @@ Para essa API são feitos testes de integração usando [Jest](https://github.co
 Primeiro, faça o clone desse repositório na sua maquina:
 
 ```
-git clone https://github.com/PauloCruz06/projeto20-repoprovas.git
+git clone https://github.com/PauloCruz06/repoprovas.git
 ```
 
 Depois, dentro da pasta, rode o seguinte comando para instalar as dependencias.
